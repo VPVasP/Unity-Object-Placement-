@@ -524,6 +524,7 @@ MonoBehaviour:
   dropMarker: {fileID: 1150347945}
   SmoothSpeed: 0.2
   SwapRate: 0.15
+  dropClip: {fileID: 8300000, guid: 2a707fa69a23cc44f87c645560199b5a, type: 3}
   tileMarker: {fileID: 1209742315}
 --- !u!4 &1150347945 stripped
 Transform:

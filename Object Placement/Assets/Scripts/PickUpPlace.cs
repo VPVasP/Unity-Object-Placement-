@@ -10,22 +10,34 @@ public class PickUpPlace : MonoBehaviour
     public LayerMask groundLayer;
     //pickedup object and dropmarker
     public Transform pickedObject;
-    public Transform dropMarker;
-    public float SmoothSpeed;
+    [SerializeField] private Transform dropMarker;
+    [SerializeField] private float SmoothSpeed;
     //dropmarker script refrence
     DropMarker dropMarkerComponent;
     float SwapCurrent;
-    public float SwapRate = 0.15f;
+    [SerializeField] private float SwapRate = 0.15f;
     private Vector3 velocity = Vector3.zero;
-
+    private AudioSource aud;
+    [SerializeField] private AudioClip dropClip;
     public Transform tileMarker;
     // Start is called before the first frame update
+    public enum ObjectType
+    {
+        Capsule,
+    }
     void Start()
     {
         dropMarkerComponent = dropMarker.GetComponent<DropMarker>();
         dropMarker.gameObject.SetActive(false);
         tileMarker.gameObject.SetActive(false);
         SmoothSpeed = 0.2f;
+        if (aud == null)
+        {
+            gameObject.AddComponent<AudioSource>();
+        }
+        aud = gameObject.GetComponent<AudioSource>();
+        aud.loop = false;
+        aud.playOnAwake = false;
     }
 
     // Update is called once per frame
@@ -45,7 +57,7 @@ public class PickUpPlace : MonoBehaviour
                     //we pick up the object if it's a capsule
                     Debug.Log("Hit object: " + hit.collider.gameObject.name);
 
-                    if (hit.collider.CompareTag("Capsule"))
+                    if (hit.collider.CompareTag(ObjectType.Capsule.ToString()))
                     {
                         pickedObject = hit.transform.root;
                         pickedObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -74,7 +86,7 @@ public class PickUpPlace : MonoBehaviour
                     pickedObject = null;
                     dropMarker.gameObject.SetActive(false);
                     tileMarker.gameObject.SetActive(false);
-                    DroppedFigure(x, z);
+                    DroppedCapsule(x, z);
               }
                
             }
@@ -153,9 +165,10 @@ public class PickUpPlace : MonoBehaviour
         }
     }
     //function that gets called when a figure is being dropped
-    public void DroppedFigure( int DropX, int DropZ)
+    public void DroppedCapsule(int DropX,int DropZ)
     {
-     
+        aud.clip = dropClip;
+        aud.Play();
         Debug.Log("Dropped on tile: " + DropX + "," + DropZ);
     }
 }
