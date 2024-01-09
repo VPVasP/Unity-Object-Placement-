@@ -24,6 +24,8 @@ public class PickUpPlace : MonoBehaviour
     public enum ObjectType
     {
         Capsule,
+        Cube,
+        Sphere,
     }
     void Start()
     {
@@ -38,6 +40,7 @@ public class PickUpPlace : MonoBehaviour
         aud = gameObject.GetComponent<AudioSource>();
         aud.loop = false;
         aud.playOnAwake = false;
+
     }
 
     // Update is called once per frame
@@ -64,12 +67,27 @@ public class PickUpPlace : MonoBehaviour
                         dropMarker.gameObject.SetActive(true);
                         tileMarker.gameObject.SetActive(true);
                     }
+                     if (hit.collider.CompareTag(ObjectType.Cube.ToString()))
+                    {
+                        pickedObject = hit.transform.root;
+                        pickedObject.GetComponent<Rigidbody>().isKinematic = true;
+                        dropMarker.gameObject.SetActive(true);
+                        tileMarker.gameObject.SetActive(true);
+                    }
+                     if (hit.collider.CompareTag(ObjectType.Sphere.ToString()))
+                    {
+                        pickedObject = hit.transform.root;
+                        pickedObject.GetComponent<Rigidbody>().isKinematic = true;
+                        dropMarker.gameObject.SetActive(true);
+                        tileMarker.gameObject.SetActive(true);
+                    }
 
-                    Debug.DrawLine(ray.origin, hit.point, Color.green); 
+                    Debug.DrawLine(ray.origin, hit.point, Color.green);
                 }
-               
             }
-            else
+
+        
+        else
             {
                 //we drop the object if the marker is on a free tile
                 if (dropMarkerComponent.FreeTile)
@@ -86,7 +104,7 @@ public class PickUpPlace : MonoBehaviour
                     pickedObject = null;
                     dropMarker.gameObject.SetActive(false);
                     tileMarker.gameObject.SetActive(false);
-                    DroppedCapsule(x, z);
+                    DroppedObject(x, z);
               }
                
             }
@@ -165,7 +183,7 @@ public class PickUpPlace : MonoBehaviour
         }
     }
     //function that gets called when a figure is being dropped
-    public void DroppedCapsule(int DropX,int DropZ)
+    public void DroppedObject(int DropX,int DropZ)
     {
         aud.clip = dropClip;
         aud.Play();
