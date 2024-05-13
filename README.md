@@ -1,0 +1,1 @@
+A Unity Object Placement Project where the user can move around the object and rotate it and place it around the world. like a Sims Game. It checks if there is another object in the way before placement.
